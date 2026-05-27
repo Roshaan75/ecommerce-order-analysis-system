@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Commerce Order Analysis System</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Python for Data Science</p>
+        <h1>E-Commerce Order Analysis System</h1>
+      </div>
+      <nav aria-label="Primary navigation">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#case-study">Case Study</a>
+        <a href="#eda">EDA</a>
+        <a href="#data-entry">Input Data</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="dashboard">
+        <div class="hero-copy">
+          <p class="eyebrow">Case study report + exploratory data analysis</p>
+          <h2>Turning order records into sales, customer, and operations insight.</h2>
+          <p>
+            A compact analytical dashboard based on the submitted reports for Roshaan S
+            (2117250020353), covering revenue performance, category trends, repeat
+            customers, delivery concerns, returns, and future analytics enhancements.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#eda">View EDA</a>
+            <a class="button" href="../2117250020353 Assignment 3  E - Commerce Order Analysis System . docx.pdf">Case Study PDF</a>
+            <a class="button" href="../2117250020353 Assignment 4.pdf">EDA PDF</a>
+          </div>
+        </div>
+
+        <div class="control-panel" aria-label="Dashboard summary">
+          <div class="panel-header">
+            <span>Live KPI View</span>
+            <strong>Delivered Orders</strong>
+          </div>
+          <div class="signal-grid">
+            <article>
+              <span>Total Revenue</span>
+              <strong id="heroRevenue">Rs. 0</strong>
+              <small id="heroRevenueNote">from delivered orders</small>
+            </article>
+            <article>
+              <span>Average Order Value</span>
+              <strong id="heroAov">Rs. 0</strong>
+              <small id="heroAovNote">0 delivered orders</small>
+            </article>
+            <article>
+              <span>Top Category</span>
+              <strong id="heroTopCategory">None</strong>
+              <small id="heroTopCategoryNote">Add data to analyze</small>
+            </article>
+            <article>
+              <span>Peak Month</span>
+              <strong id="heroPeakMonth">None</strong>
+              <small id="heroPeakMonthNote">Add data to analyze</small>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section band">
+        <div class="section-heading">
+          <p class="eyebrow">System Overview</p>
+          <h2>What the analysis system solves</h2>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h3>Order Visibility</h3>
+            <p>Replaces manual tracking with real-time dashboards across product, region, time period, and status.</p>
+          </article>
+          <article>
+            <h3>Customer Intelligence</h3>
+            <p>Identifies high-value customers, repeat buyers, and behavior patterns for loyalty campaigns.</p>
+          </article>
+          <article>
+            <h3>Operations Insight</h3>
+            <p>Highlights delivery delays, return reasons, fulfilment bottlenecks, cancellations, and fraud signals.</p>
+          </article>
+          <article>
+            <h3>Forecasting</h3>
+            <p>Supports demand prediction and inventory planning so peak demand periods do not become stockout risks.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="eda">
+        <div class="section-heading">
+          <p class="eyebrow">Exploratory Data Analysis</p>
+          <h2>EDA from user-entered order data</h2>
+        </div>
+
+        <div class="data-workspace" id="data-entry">
+          <form class="order-form" id="orderForm">
+            <div class="block-title">
+              <h3>Input Order Data</h3>
+              <span>Manual entry</span>
+            </div>
+            <div class="form-grid">
+              <label>
+                Order ID
+                <input id="orderId" name="orderId" type="text" placeholder="ORD001" required />
+              </label>
+              <label>
+                Customer
+                <input id="customer" name="customer" type="text" placeholder="Alice" required />
+              </label>
+              <label>
+                Product
+                <input id="product" name="product" type="text" placeholder="Laptop" required />
+              </label>
+              <label>
+                Category
+                <input id="category" name="category" type="text" placeholder="Electronics" required />
+              </label>
+              <label>
+                Quantity
+                <input id="qty" name="qty" type="number" min="1" step="1" value="1" required />
+              </label>
+              <label>
+                Unit Price
+                <input id="price" name="price" type="number" min="0" step="0.01" placeholder="55000" required />
+              </label>
+              <label>
+                Order Date
+                <input id="date" name="date" type="date" required />
+              </label>
+              <label>
+                Status
+                <select id="status" name="status" required>
+                  <option>Delivered</option>
+                  <option>Cancelled</option>
+                  <option>Returned</option>
+                  <option>Pending</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="button primary" type="submit">Add Order</button>
+              <button class="button" id="loadSample" type="button">Load Sample Data</button>
+              <button class="button danger" id="clearData" type="button">Clear Data</button>
+            </div>
+            <div class="csv-import">
+              <label>
+                Bulk CSV Input
+                <textarea id="csvInput" rows="5" placeholder="orderId,customer,product,category,qty,price,date,status&#10;ORD101,Alice,Laptop,Electronics,1,55000,2025-01-05,Delivered"></textarea>
+              </label>
+              <div class="form-actions">
+                <button class="button" id="importCsv" type="button">Import CSV</button>
+              </div>
+              <p id="csvMessage" class="helper-text">Use the exact column order shown in the placeholder.</p>
+            </div>
+          </form>
+
+          <div class="table-panel">
+            <div class="block-title">
+              <h3>Current Dataset</h3>
+              <span id="tableCount">0 records</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="analytics-layout">
+          <div class="chart-block">
+            <div class="block-title">
+              <h3>Category Revenue</h3>
+              <span>Rs.</span>
+            </div>
+            <div id="categoryChart" class="empty-state">Add orders or load sample data to generate category analysis.</div>
+          </div>
+
+          <div class="chart-block">
+            <div class="block-title">
+              <h3>Monthly Revenue Trend</h3>
+              <span id="monthRange">No data</span>
+            </div>
+            <div class="mini-chart" id="monthlyChart" aria-label="Monthly revenue bar chart"></div>
+            <div class="month-labels" id="monthLabels"></div>
+          </div>
+        </div>
+
+        <div class="insight-strip">
+          <article>
+            <span>Orders</span>
+            <strong id="orderCount">0</strong>
+            <p id="orderStatusSummary">No data entered yet</p>
+          </article>
+          <article>
+            <span>Top Products</span>
+            <strong id="topProduct">None</strong>
+            <p id="topProductList">Add delivered orders to rank products</p>
+          </article>
+          <article>
+            <span>Repeat Customers</span>
+            <strong id="repeatCount">0</strong>
+            <p id="repeatList">No repeat customers found</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section band" id="case-study">
+        <div class="section-heading">
+          <p class="eyebrow">Case Study Report</p>
+          <h2>Proposed system compared with current workflow</h2>
+        </div>
+
+        <div class="comparison">
+          <div class="comparison-row head">
+            <span>Aspect</span>
+            <span>Existing System</span>
+            <span>Proposed System</span>
+          </div>
+          <div class="comparison-row">
+            <span>Order Visibility</span>
+            <span>Manual tracking only</span>
+            <span>Real-time dashboard</span>
+          </div>
+          <div class="comparison-row">
+            <span>Data Analysis</span>
+            <span>Spreadsheet-based</span>
+            <span>Automated analytics engine</span>
+          </div>
+          <div class="comparison-row">
+            <span>Returns</span>
+            <span>Handled case by case</span>
+            <span>Automated trend detection</span>
+          </div>
+          <div class="comparison-row">
+            <span>Forecasting</span>
+            <span>Not available</span>
+            <span>ML-based demand prediction</span>
+          </div>
+          <div class="comparison-row">
+            <span>Fraud Detection</span>
+            <span>Manual review</span>
+            <span>Pattern-based auto-flagging</span>
+          </div>
+        </div>
+
+        <div class="findings">
+          <article>
+            <h3>Key Dataset Findings</h3>
+            <p>Festival season demand can contribute up to 40% of annual revenue, while electronics show the highest return rate at 18% due to specification mismatches.</p>
+          </article>
+          <article>
+            <h3>Business Impact</h3>
+            <p>About 12% of customers contribute 65% of revenue, making customer segmentation and loyalty strategy essential.</p>
+          </article>
+          <article>
+            <h3>Logistics Issue</h3>
+            <p>Tier-2 and Tier-3 city deliveries average 2.3 days beyond the promised date, directly affecting customer satisfaction.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="roadmap">
+        <div class="section-heading">
+          <p class="eyebrow">Future Enhancement</p>
+          <h2>From console project to analytics platform</h2>
+        </div>
+        <div class="timeline">
+          <article>
+            <span>01</span>
+            <h3>Database Integration</h3>
+            <p>Move from static dictionaries to MySQL or SQLite for persistent order storage.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Visual Analytics</h3>
+            <p>Add Matplotlib, Seaborn, or dashboard views for charts and category comparisons.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>CSV and Excel Support</h3>
+            <p>Use Pandas to import real business exports from Shopify, Amazon, or similar platforms.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Predictive Intelligence</h3>
+            <p>Introduce Scikit-learn forecasting, fraud detection, churn prediction, and RFM segmentation.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Roshaan S | 2117250020353</span>
+      <span>Rajalakshmi Institute of Technology</span>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
